@@ -1241,13 +1241,13 @@ static void *p521_mayo5_gen_init(void *provctx, int selection) {
 
 static void *CROSSrsdp128balanced_new_key(void *provctx) {
     return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
-                        OQS_SIG_alg_cross_rsdp_128_balanced,
+                        OQS_SIG_alg_mayo_5,
                         "CROSSrsdp128balanced", KEY_TYPE_SIG, NULL, 128, 56, 0);
 }
 
 static void *CROSSrsdp128balanced_gen_init(void *provctx, int selection) {
     return oqsx_gen_init(provctx, selection,
-                         OQS_SIG_alg_cross_rsdp_128_balanced,
+                         OQS_SIG_alg_mayo_5,
                          "CROSSrsdp128balanced", 0, 128, 56, 0);
 }
 

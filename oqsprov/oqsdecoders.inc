@@ -166,6 +166,7 @@ DECODER_w_structure("p521_hqc256", der, SubjectPublicKeyInfo, p521_hqc256),
 
 
 #ifdef OQS_ENABLE_SIG_dilithium_2
+DECODER_w_structure("dilithium2", der, type_specific_keypair, dilithium2),
 DECODER_w_structure("dilithium2", der, PrivateKeyInfo, dilithium2),
 DECODER_w_structure("dilithium2", der, SubjectPublicKeyInfo, dilithium2),DECODER_w_structure("p256_dilithium2", der, PrivateKeyInfo, p256_dilithium2),
 DECODER_w_structure("p256_dilithium2", der, SubjectPublicKeyInfo, p256_dilithium2),DECODER_w_structure("rsa3072_dilithium2", der, PrivateKeyInfo, rsa3072_dilithium2),

@@ -1149,6 +1149,8 @@ extern const OSSL_DISPATCH
 #endif /* OQS_KEM_ENCODERS */
 
 extern const OSSL_DISPATCH
+    oqs_dilithium2_to_type_specific_keypair_der_encoder_functions[];
+extern const OSSL_DISPATCH
     oqs_dilithium2_to_PrivateKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
     oqs_dilithium2_to_PrivateKeyInfo_pem_encoder_functions[];
@@ -1161,6 +1163,8 @@ extern const OSSL_DISPATCH
 extern const OSSL_DISPATCH
     oqs_dilithium2_to_SubjectPublicKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH oqs_dilithium2_to_text_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_type_specific_keypair_der_to_dilithium2_decoder_functions[];
 extern const OSSL_DISPATCH
     oqs_PrivateKeyInfo_der_to_dilithium2_decoder_functions[];
 extern const OSSL_DISPATCH

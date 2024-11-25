@@ -201,7 +201,7 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
     {0, "p384_mayo3", OQS_SIG_alg_mayo_3, KEY_TYPE_HYB_SIG, 192},
     {0, "mayo5", OQS_SIG_alg_mayo_5, KEY_TYPE_SIG, 256},
     {0, "p521_mayo5", OQS_SIG_alg_mayo_5, KEY_TYPE_HYB_SIG, 256},
-    {0, "CROSSrsdp128balanced", OQS_SIG_alg_cross_rsdp_128_balanced,
+    {0, "CROSSrsdp128balanced", OQS_SIG_alg_mayo_5,
      KEY_TYPE_SIG, 128},
     ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_END
 };

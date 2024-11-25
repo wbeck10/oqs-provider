@@ -678,6 +678,7 @@ MAKE_DECODER(_ecp, "p521_hqc256", p521_hqc256, oqsx, PrivateKeyInfo);
 MAKE_DECODER(_ecp, "p521_hqc256", p521_hqc256, oqsx, SubjectPublicKeyInfo);
 #endif /* OQS_KEM_ENCODERS */
 
+MAKE_DECODER(, "dilithium2", dilithium2, oqsx, type_specific_keypair);
 MAKE_DECODER(, "dilithium2", dilithium2, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "dilithium2", dilithium2, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(, "p256_dilithium2", p256_dilithium2, oqsx, PrivateKeyInfo);

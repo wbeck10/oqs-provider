@@ -494,6 +494,7 @@ ENCODER_TEXT("p521_hqc256", p521_hqc256),
 
 
 #ifdef OQS_ENABLE_SIG_dilithium_2
+ENCODER_w_structure("dilithium2", dilithium2, der, type_specific_keypair),
 ENCODER_w_structure("dilithium2", dilithium2, der, PrivateKeyInfo),
 ENCODER_w_structure("dilithium2", dilithium2, pem, PrivateKeyInfo),
 ENCODER_w_structure("dilithium2", dilithium2, der, EncryptedPrivateKeyInfo),

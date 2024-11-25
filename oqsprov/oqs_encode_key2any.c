@@ -1476,6 +1476,28 @@ static int key2any_encode(struct key2any_ctx_st *ctx, OSSL_CORE_BIO *cout,
     return ret;
 }
 
+#define oqsx_type_specific_priv_to_der oqsx_epki_priv_to_der
+#define oqsx_type_specific_pub_to_der oqsx_spki_pub_to_der
+static int key_to_type_specific_der_priv_bio(BIO *out, const void *key,
+                                        int key_nid,
+                                        ossl_unused const char *pemname,
+                                        key_to_paramstring_fn *p2s,
+                                        i2d_of_void *k2d,
+                                        struct key2any_ctx_st *ctx)
+{
+    return key_to_pki_der_priv_bio(out, key, key_nid, pemname, p2s, k2d, ctx);
+}
+
+static int key_to_type_specific_der_pub_bio(BIO *out, const void *key,
+                                        int key_nid,
+                                        ossl_unused const char *pemname,
+                                        key_to_paramstring_fn *p2s,
+                                        i2d_of_void *k2d,
+                                        struct key2any_ctx_st *ctx)
+{
+    return key_to_spki_der_pub_bio(out, key, key_nid, pemname, p2s, k2d, ctx);
+}
+
 #define DO_PRIVATE_KEY_selection_mask OSSL_KEYMGMT_SELECT_PRIVATE_KEY
 #define DO_PRIVATE_KEY(impl, type, kind, output)                               \
     if ((selection & DO_PRIVATE_KEY_selection_mask) != 0)                      \
@@ -2353,6 +2375,7 @@ MAKE_ENCODER(_ecp, p521_hqc256, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(_ecp, p521_hqc256);
 #endif /* OQS_KEM_ENCODERS */
 
+MAKE_ENCODER(, dilithium2, oqsx, type_specific_keypair, der);
 MAKE_ENCODER(, dilithium2, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, dilithium2, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium2, oqsx, PrivateKeyInfo, der);

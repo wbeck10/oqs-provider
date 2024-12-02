@@ -323,6 +323,7 @@ static int key_to_spki_der_pub_bio(BIO *out, const void *key, int key_nid,
     if (xpk != NULL)
         ret = i2d_X509_PUBKEY_bio(out, xpk);
 
+    printBufInHexWithMsg(__FUNCTION__, "Pubkey", okey->pubkey, okey->pubkeylen);
     X509_PUBKEY_free(xpk);
     return ret;
 }
@@ -365,7 +366,7 @@ static int key_to_spki_pem_pub_bio(BIO *out, const void *key, int key_nid,
  * Note that these functions completely ignore p2s, and rather rely entirely
  * on k2d to do the complete work.
  */
-/*
+
 static int key_to_type_specific_der_bio(BIO *out, const void *key,
                                         int key_nid,
                                         ossl_unused const char *pemname,
@@ -375,22 +376,34 @@ static int key_to_type_specific_der_bio(BIO *out, const void *key,
 {
     unsigned char *der = NULL;
     int derlen;
-    int ret;
+    int ret = 0;
+    void *str = NULL;
+    int strtype = V_ASN1_UNDEF;
+    PKCS8_PRIV_KEY_INFO *p8info;
 
     OQS_ENC_PRINTF("OQS ENC provider: key_to_type_specific_der_bio called\n");
 
-    if ((derlen = k2d(key, &der)) <= 0) {
-        ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
-        return 0;
-    }
+  //  if ((derlen = k2d(key, &der)) <= 0) {
+  //      ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+  //      return 0;
+  //  }
 
-    ret = BIO_write(out, der, derlen);
-    OPENSSL_free(der);
+    if (p2s != NULL && !p2s(key, key_nid, ctx->save_parameters, &str, &strtype))
+        return 0;
+
+    p8info = key_to_p8info(key, key_nid, str, strtype, k2d);
+
+    if (p8info != NULL)
+        ret = i2d_PKCS8_PRIV_KEY_INFO_bio(out, p8info);
+    else
+        free_asn1_data(strtype, str);
+
+    PKCS8_PRIV_KEY_INFO_free(p8info);
+
+ //   ret = BIO_write(out, der, derlen);
+  //  OPENSSL_free(der);
     return ret > 0;
 }
-#define key_to_type_specific_der_priv_bio key_to_type_specific_der_bio
-#define key_to_type_specific_der_pub_bio key_to_type_specific_der_bio
-#define key_to_type_specific_der_param_bio key_to_type_specific_der_bio
 
 static int key_to_type_specific_pem_bio_cb(BIO *out, const void *key,
                                            int key_nid, const char *pemname,
@@ -398,11 +411,10 @@ static int key_to_type_specific_pem_bio_cb(BIO *out, const void *key,
                                            i2d_of_void *k2d,
                                            struct key2any_ctx_st *ctx)
 {
-    OQS_ENC_PRINTF("OQS ENC provider: key_to_type_specific_pem_bio_cb called
-\n");
+    OQS_ENC_PRINTF("OQS ENC provider: key_to_type_specific_pem_bio_cb called\n");
 
     return PEM_ASN1_write_bio(k2d, pemname, out, key, ctx->cipher,
-                              NULL, 0, ctx->pwcb, ctx->pwcbarg) > 0;
+                              NULL, 0, NULL, NULL) > 0;
 }
 
 static int key_to_type_specific_pem_priv_bio(BIO *out, const void *key,
@@ -411,12 +423,10 @@ static int key_to_type_specific_pem_priv_bio(BIO *out, const void *key,
                                              i2d_of_void *k2d,
                                              struct key2any_ctx_st *ctx)
 {
-    OQS_ENC_PRINTF("OQS ENC provider: key_to_type_specific_pem_priv_bio
-called\n");
+    OQS_ENC_PRINTF("OQS ENC provider: key_to_type_specific_pem_priv_bio called\n");
 
     return key_to_type_specific_pem_bio_cb(out, key, key_nid, pemname,
-                                           p2s, k2d, ctx, ctx->pwcb,
-ctx->pwcbarg);
+                                           p2s, k2d, ctx);
 
 }
 
@@ -426,11 +436,10 @@ static int key_to_type_specific_pem_pub_bio(BIO *out, const void *key,
                                             i2d_of_void *k2d,
                                             struct key2any_ctx_st *ctx)
 {
-    OQS_ENC_PRINTF("OQS ENC provider: key_to_type_specific_pem_pub_bio
-called\n");
+    OQS_ENC_PRINTF("OQS ENC provider: key_to_type_specific_pem_pub_bio called\n");
 
     return key_to_type_specific_pem_bio_cb(out, key, key_nid, pemname,
-                                           p2s, k2d, ctx, NULL, NULL);
+                                           p2s, k2d, ctx);
 }
 
 #ifndef OPENSSL_NO_KEYPARAMS
@@ -440,14 +449,13 @@ static int key_to_type_specific_pem_param_bio(BIO *out, const void *key,
                                               i2d_of_void *k2d,
                                               struct key2any_ctx_st *ctx)
 {
-    OQS_ENC_PRINTF("OQS ENC provider: key_to_type_specific_pem_param_bio
-called\n");
+    OQS_ENC_PRINTF("OQS ENC provider: key_to_type_specific_pem_param_bio called\n");
 
     return key_to_type_specific_pem_bio_cb(out, key, key_nid, pemname,
-                                           p2s, k2d, ctx, NULL, NULL);
+                                           p2s, k2d, ctx);
 }
 #endif
-*/
+
 /* ---------------------------------------------------------------------- */
 
 static int prepare_oqsx_params(const void *oqsxkey, int nid, int save,
@@ -1485,7 +1493,7 @@ static int key_to_type_specific_der_priv_bio(BIO *out, const void *key,
                                         i2d_of_void *k2d,
                                         struct key2any_ctx_st *ctx)
 {
-    return key_to_pki_der_priv_bio(out, key, key_nid, pemname, p2s, k2d, ctx);
+    return key_to_type_specific_der_bio(out, key, key_nid, pemname, p2s, k2d, ctx);
 }
 
 static int key_to_type_specific_der_pub_bio(BIO *out, const void *key,
@@ -1496,6 +1504,7 @@ static int key_to_type_specific_der_pub_bio(BIO *out, const void *key,
                                         struct key2any_ctx_st *ctx)
 {
     return key_to_spki_der_pub_bio(out, key, key_nid, pemname, p2s, k2d, ctx);
+//    return key_to_type_specific_der_bio(out, key, key_nid, pemname, p2s, k2d, ctx);
 }
 
 #define DO_PRIVATE_KEY_selection_mask OSSL_KEYMGMT_SELECT_PRIVATE_KEY

@@ -25,6 +25,26 @@ int asn1_d2i_read_bio(BIO *in, BUF_MEM **pb); // TBD: OK to use?
 
 #include "oqs_endecoder_local.h"
 
+void printBufInHexWithMsg(char* fct, char* msg, unsigned char* in, unsigned int inlen)
+{
+    {
+      fprintf(stdout, "%s->%s [%d]:\n", fct, msg, inlen);
+      if (in != NULL && inlen > 0)
+      {
+          unsigned char *ptr = in;
+          unsigned char ch = '\0';
+          unsigned int i = 0;
+          for (i = 0; i < inlen; i++, ptr++)
+          {
+              ch = (*ptr);
+              fprintf(stdout, "%02x ", ch);
+          }
+          fprintf(stdout, "\n");
+      }
+      fflush(stdout);
+    }
+}
+
 #ifdef NDEBUG
 #define OQS_DEC_PRINTF(a)
 #define OQS_DEC_PRINTF2(a, b)
@@ -373,6 +393,16 @@ next:
     der = NULL;
 
     if (key != NULL) {
+        {
+            /* Trace out key values */
+            OQSX_KEY *oqs_key = (OQSX_KEY*)key;
+            if (oqs_key->privkey && oqs_key->privkeylen > 0) {
+                printBufInHexWithMsg(__FUNCTION__, "Privkey", oqs_key->privkey, oqs_key->privkeylen);
+            }
+            if (oqs_key->pubkey && oqs_key->pubkeylen > 0) {
+                printBufInHexWithMsg(__FUNCTION__, "Pubkey", oqs_key->pubkey, oqs_key->pubkeylen);
+            }
+        }
         OSSL_PARAM params[4];
         int object_type = OSSL_OBJECT_PKEY;
 

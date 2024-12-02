@@ -22,6 +22,7 @@
 
 // stolen from openssl/crypto/param_build_set.c as
 // ossl_param_build_set_octet_string not public API:
+extern void printBufInHexWithMsg(char* fct, char* msg, unsigned char* in, unsigned int inlen);
 
 int oqsx_param_build_set_octet_string(OSSL_PARAM_BLD *bld, OSSL_PARAM *p,
                                       const char *key,
@@ -621,6 +622,16 @@ static void *oqsx_genkey(struct oqsx_gen_ctx *gctx) {
     if (oqsx_key_gen(key)) {
         ERR_raise(ERR_LIB_USER, OQSPROV_UNEXPECTED_NULL);
         return NULL;
+    }
+    {
+        /* Trace out key values */
+        OQSX_KEY *oqs_key = (OQSX_KEY*)key;
+        if (oqs_key->privkey && oqs_key->privkeylen > 0) {
+            printBufInHexWithMsg(__FUNCTION__, "Privkey", oqs_key->privkey, oqs_key->privkeylen);
+        }
+        if (oqs_key->pubkey && oqs_key->pubkeylen > 0) {
+            printBufInHexWithMsg(__FUNCTION__, "Pubkey", oqs_key->pubkey, oqs_key->pubkeylen);
+        }
     }
     return key;
 }
@@ -1241,13 +1252,13 @@ static void *p521_mayo5_gen_init(void *provctx, int selection) {
 
 static void *CROSSrsdp128balanced_new_key(void *provctx) {
     return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
-                        OQS_SIG_alg_mayo_5,
+                        OQS_SIG_alg_cross_rsdp_128_balanced,
                         "CROSSrsdp128balanced", KEY_TYPE_SIG, NULL, 128, 56, 0);
 }
 
 static void *CROSSrsdp128balanced_gen_init(void *provctx, int selection) {
     return oqsx_gen_init(provctx, selection,
-                         OQS_SIG_alg_mayo_5,
+                         OQS_SIG_alg_cross_rsdp_128_balanced,
                          "CROSSrsdp128balanced", 0, 128, 56, 0);
 }
 

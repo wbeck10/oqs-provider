@@ -28,7 +28,7 @@ set_tests_properties(oqs_signatures
 endif()
 
 add_executable(oqs_test_signatures oqs_test_signatures.c test_common.c)
-target_link_libraries(oqs_test_signatures PRIVATE ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS} pthread dl)
+target_link_libraries(oqs_test_signatures PRIVATE ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS} pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl)
 
 add_test(
   NAME oqs_kems
@@ -49,7 +49,7 @@ set_tests_properties(oqs_kems
 endif()
 
 add_executable(oqs_test_kems oqs_test_kems.c test_common.c)
-target_link_libraries(oqs_test_kems PRIVATE ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS} pthread dl)
+target_link_libraries(oqs_test_kems PRIVATE ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS} pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl)
 
 add_test(
     NAME oqs_groups
@@ -70,7 +70,7 @@ set_tests_properties(oqs_groups
 )
 endif()
 add_executable(oqs_test_groups oqs_test_groups.c test_common.c tlstest_helpers.c)
-target_link_libraries(oqs_test_groups PRIVATE ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS} pthread dl)
+target_link_libraries(oqs_test_groups PRIVATE ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS} pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl)
 
 add_test(
     NAME oqs_tlssig
@@ -92,10 +92,10 @@ set_tests_properties(oqs_tlssig
 )
 endif()
 add_executable(oqs_test_tlssig oqs_test_tlssig.c test_common.c tlstest_helpers.c)
-target_link_libraries(oqs_test_tlssig PRIVATE ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS} pthread dl)
+target_link_libraries(oqs_test_tlssig PRIVATE ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS} pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl)
 
 add_executable(oqs_test_endecode oqs_test_endecode.c test_common.c)
-target_link_libraries(oqs_test_endecode PRIVATE ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS} pthread dl)
+target_link_libraries(oqs_test_endecode PRIVATE ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS} pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl)
 add_test(
   NAME oqs_endecode
   COMMAND oqs_test_endecode
@@ -116,7 +116,7 @@ endif()
 
 add_executable(oqs_test_evp_pkey_params oqs_test_evp_pkey_params.c test_common.c)
 target_include_directories(oqs_test_evp_pkey_params PRIVATE "../oqsprov")
-target_link_libraries(oqs_test_evp_pkey_params PRIVATE ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS} pthread dl)
+target_link_libraries(oqs_test_evp_pkey_params PRIVATE ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS} pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl pthread dl)
 add_test(
   NAME oqs_evp_pkey_params
   COMMAND oqs_test_evp_pkey_params
